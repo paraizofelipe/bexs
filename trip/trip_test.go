@@ -1,4 +1,4 @@
-package travel
+package trip
 
 import (
 	"errors"
@@ -107,7 +107,7 @@ func TestGetCheapestRoute(t *testing.T) {
 		},
 	}
 
-	travel := NewTravel(routes)
+	travel := NewTrip(routes)
 
 	for _, test := range tests {
 		t.Run(test.description, func(t *testing.T) {
@@ -142,7 +142,7 @@ func TestTravelString(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		travel := NewTravel(test.in)
+		travel := NewTrip(test.in)
 		travel.BestRoute.Routes = test.in
 		travel.BestRoute.TotalPrice = test.in[0].Price + test.in[1].Price
 
@@ -185,7 +185,7 @@ func TestImportRoutes(t *testing.T) {
 			t.Error(err)
 		}
 
-		trip := NewTravel(routes)
+		trip := NewTrip(routes)
 		if len(trip.Routes) != len(test.expected) {
 			t.Errorf("expected: %v --> current: %v", test.expected, trip.Routes)
 		}
@@ -229,7 +229,7 @@ func TestGetCheapest(t *testing.T) {
 		},
 	}
 
-	travel := NewTravel(routes)
+	travel := NewTrip(routes)
 
 	for _, test := range tests {
 		t.Run(test.description, func(t *testing.T) {

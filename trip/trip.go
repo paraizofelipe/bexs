@@ -1,4 +1,4 @@
-package travel
+package trip
 
 import (
 	"fmt"
@@ -7,9 +7,9 @@ import (
 	"github.com/paraizofelipe/bexs/common/csv"
 )
 
-type Travel struct {
+type Trip struct {
 	Routes    []Route
-	BestRoute BestTravel
+	BestRoute BestRoute
 }
 
 type Route struct {
@@ -18,19 +18,19 @@ type Route struct {
 	Price int
 }
 
-type BestTravel struct {
+type BestRoute struct {
 	Routes     []Route
 	TotalPrice int
 }
 
-func NewTravel(routes []Route) Travel {
-	return Travel{
+func NewTrip(routes []Route) Trip {
+	return Trip{
 		Routes: routes,
 	}
 }
 
 // String ---
-func (b BestTravel) String() string {
+func (b BestRoute) String() string {
 	var output string
 	for index, route := range b.Routes {
 		if index == (len(b.Routes) - 1) {
@@ -73,12 +73,12 @@ func LineToRoute(line []string) (route Route, err error) {
 }
 
 // AddRoute ---
-func (t *Travel) AddRoute(route Route) {
+func (t *Trip) AddRoute(route Route) {
 	t.Routes = append(t.Routes, route)
 }
 
 // GetCheapestRoute ---
-func (t Travel) GetCheapestRoute(origin string) (cheapestRoute Route) {
+func (t Trip) GetCheapestRoute(origin string) (cheapestRoute Route) {
 	for _, route := range t.Routes {
 		if route.From == origin {
 			if cheapestRoute.Price == 0 {
@@ -93,17 +93,17 @@ func (t Travel) GetCheapestRoute(origin string) (cheapestRoute Route) {
 }
 
 // GetCheapest ---
-func (t Travel) GetCheapest(origin string, destination string) (cheapestTravel BestTravel) {
+func (t Trip) GetCheapest(origin string, destination string) (cheapestTrip BestRoute) {
 	for {
 		cheapestRoute := t.GetCheapestRoute(origin)
-		cheapestTravel.TotalPrice = cheapestTravel.TotalPrice + cheapestRoute.Price
+		cheapestTrip.TotalPrice = cheapestTrip.TotalPrice + cheapestRoute.Price
 
 		if cheapestRoute.To == destination {
-			cheapestTravel.Routes = append(cheapestTravel.Routes, cheapestRoute)
+			cheapestTrip.Routes = append(cheapestTrip.Routes, cheapestRoute)
 			break
 		}
 
-		cheapestTravel.Routes = append(cheapestTravel.Routes, cheapestRoute)
+		cheapestTrip.Routes = append(cheapestTrip.Routes, cheapestRoute)
 		origin = cheapestRoute.To
 	}
 	return
