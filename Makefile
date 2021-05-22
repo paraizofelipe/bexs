@@ -9,5 +9,8 @@ linter:
 lint:
 	golangci-lint run ./...
 
+start:
+	PORT=3000 go run api/main.go
+
 test:
 	go test ./... -covermode=count -count 1 -v  
