@@ -8,7 +8,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/paraizofelipe/bexs/trip"
+	"github.com/paraizofelipe/bexs/trip/model"
+	"github.com/paraizofelipe/bexs/trip/service"
 )
 
 // ValidateArgs ---
@@ -30,27 +31,25 @@ func ValidateArgs(args []string) (err error) {
 func main() {
 	var (
 		err       error
-		routes    []trip.Route
 		input     string
 		locations []string
-		t         trip.Trip
+		trip      model.Trip
 	)
+
 	if err = ValidateArgs(os.Args); err != nil {
 		log.Fatal(err)
 	}
 
-	if routes, err = trip.ImportRoutes(os.Args[1]); err != nil {
-		log.Fatal(err)
-	}
-
-	t = trip.NewTrip(routes)
+	tripService := service.NewTrip(os.Args[1])
 
 	for {
 		fmt.Printf("please enter the route: ")
 		fmt.Scanf("%s", &input)
 		locations = strings.Split(input, "-")
 
-		t.BestRoute = t.GetCheapest(locations[0], locations[1])
-		fmt.Printf("best route: %s\n", t.BestRoute.String())
+		if trip.BestRoute, err = tripService.FindCheapest(locations[0], locations[1]); err != nil {
+			log.Fatalf("[ERROR] %v", err)
+		}
+		fmt.Printf("best route: %s\n", trip.BestRoute.String())
 	}
 }

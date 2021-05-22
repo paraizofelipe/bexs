@@ -9,8 +9,6 @@ import (
 	"strings"
 )
 
-type ProcessFunc func([]string) error
-
 func Create(dir, filename string, lines [][]string) (f *os.File, err error) {
 	if f, err = ioutil.TempFile(dir, filename); err != nil {
 		return
@@ -30,7 +28,7 @@ func ProcessLines(filename string, comma rune) (lines [][]string, err error) {
 		f      *os.File
 		reader *csv.Reader
 	)
-	if f, err = os.Open(filename); err != nil {
+	if f, err = os.OpenFile(filename, os.O_APPEND, 0600); err != nil {
 		return
 	}
 	reader = csv.NewReader(f)
