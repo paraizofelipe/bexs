@@ -38,7 +38,6 @@ func (h Trip) postRoute() http.HandlerFunc {
 		route.From = queryString.Get("from")
 		route.To = queryString.Get("to")
 		if route.Price, err = strconv.Atoi(queryString.Get("price")); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
 			http.Error(w, ErrorResponse{
 				Status: http.StatusInternalServerError,
 				Error:  "failed to add route",
@@ -48,7 +47,6 @@ func (h Trip) postRoute() http.HandlerFunc {
 		}
 
 		if err = h.RouteService.Add(route); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
 			http.Error(w, ErrorResponse{
 				Status: http.StatusInternalServerError,
 				Error:  "failed to find route",
@@ -78,7 +76,6 @@ func (h Trip) getBestRoute() http.HandlerFunc {
 		w.Header().Set("Content-Type", "application/json")
 
 		if bestRoute, err = h.TripService.FindCheapest(origin, destination); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
 			http.Error(w, ErrorResponse{
 				Status: http.StatusInternalServerError,
 				Error:  "failed to find route",
@@ -88,7 +85,6 @@ func (h Trip) getBestRoute() http.HandlerFunc {
 		}
 
 		if len(bestRoute.Routes) == 0 {
-			w.WriteHeader(http.StatusNotFound)
 			http.Error(w, ErrorResponse{
 				Status: http.StatusNotFound,
 				Error:  "route not found",
