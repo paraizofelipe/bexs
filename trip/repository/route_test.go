@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/paraizofelipe/bexs/common/csv"
+	"github.com/paraizofelipe/bexs/storage"
 	"github.com/paraizofelipe/bexs/trip/model"
 )
 
@@ -109,7 +109,7 @@ func TestFindCheapestRoute(t *testing.T) {
 
 	for _, test := range tests {
 
-		file, err := csv.Create(t.TempDir(), "example", lines)
+		file, err := storage.Create(t.TempDir(), "example", lines)
 		if err != nil {
 			t.Fatal(err)
 		}
