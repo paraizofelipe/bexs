@@ -7,22 +7,21 @@ import (
 	"os"
 
 	"github.com/paraizofelipe/bexs/api/handler"
-)
-
-const (
-	FILE = "../storage/input-route.csv"
-	HOST = "0.0.0.0"
+	"github.com/paraizofelipe/bexs/config"
 )
 
 func main() {
 	var err error
 	logger := log.New(os.Stdout, "", log.LstdFlags|log.Lshortfile)
 
-	h := handler.New(FILE, logger)
+	if _, err = os.Stat(config.Storage); err != nil {
+		logger.Fatal(err)
+	}
+	h := handler.New(config.Storage, logger)
 
 	http.HandleFunc("/api/routes/", h.Trip.TripHandler)
 
-	url := fmt.Sprintf("%s:%s", HOST, os.Getenv("PORT"))
+	url := fmt.Sprintf("%s:%s", config.Host, os.Getenv("PORT"))
 
 	log.Printf("Server listening in %s", url)
 
