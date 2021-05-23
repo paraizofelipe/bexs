@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"regexp"
-	"strconv"
+
+	"github.com/paraizofelipe/bexs/config"
 )
 
 type Route struct {
@@ -23,18 +23,15 @@ type Router struct {
 
 func NewRouter(logger *log.Logger) *Router {
 	logger.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds)
-	debug, err := strconv.ParseBool(os.Getenv("DEBUG"))
-	if err != nil {
-		debug = false
-	}
 
 	return &Router{
 		routes: make([]Route, 0),
 		logger: logger,
-		debug:  debug,
+		debug:  config.Debug,
 	}
 }
 
+//AddRoute ---
 func (r *Router) AddRoute(pattern string, method string, handler http.Handler) {
 	var found = false
 	for _, route := range r.routes {
@@ -54,6 +51,7 @@ func (r *Router) AddRoute(pattern string, method string, handler http.Handler) {
 	}
 }
 
+//ServerHTTP ---
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	for _, route := range router.routes {
 		if matched, _ := regexp.MatchString(route.Pattern, r.URL.Path); matched {
@@ -70,6 +68,7 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//trace ---
 func (r *Router) trace(req *http.Request) {
 	debugLine := fmt.Sprintf("%v %v %v", req.RemoteAddr, req.Method, req.URL.Path)
 	r.logger.Println(debugLine)
