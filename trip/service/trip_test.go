@@ -3,7 +3,7 @@ package service
 import (
 	"testing"
 
-	"github.com/paraizofelipe/bexs/common/csv"
+	"github.com/paraizofelipe/bexs/storage"
 )
 
 func TestFindCheapest(t *testing.T) {
@@ -34,7 +34,7 @@ func TestFindCheapest(t *testing.T) {
 		},
 	}
 
-	file, err := csv.Create(t.TempDir(), "example", lines)
+	file, err := storage.Create(t.TempDir(), "example", lines)
 	if err != nil {
 		t.Fatal(err)
 	}
