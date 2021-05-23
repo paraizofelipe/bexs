@@ -47,7 +47,7 @@ func (c *CSVStorage) AppendFile(line string) (err error) {
 
 	defer file.Close()
 
-	_, err = file.WriteString(line)
+	_, err = file.WriteString(line + "\n")
 	return
 }
 
