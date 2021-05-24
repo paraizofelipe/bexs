@@ -12,7 +12,10 @@ linter:
 lint:
 	golangci-lint run ./...
 
-start:
+start-cli:
+	go run cmd/main.go storage/input-route.csv 
+
+start-api:
 	FILE=storage/input-route.csv DEBUG=true HOST=0.0.0.0 PORT=3000 go run api/main.go
 
 test:
@@ -23,3 +26,5 @@ dk-start:
 
 dk-build: build-api
 	docker build -t bexs:latest .
+
+dk-deploy: dk-build dk-start
